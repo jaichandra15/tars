@@ -1,0 +1,48 @@
+{
+    "nodes": [
+      {
+        "id": "HTTP_Request",
+        "name": "Fetch Registration Data",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [200, 200],
+        "parameters": {
+          "url": "https://backend-hum5.onrender.com/api/registrations",
+          "method": "GET",
+          "responseFormat": "json"
+        }
+      },
+      {
+        "id": "Function",
+        "name": "Format Data",
+        "type": "n8n-nodes-base.function",
+        "typeVersion": 1,
+        "position": [400, 200],
+        "parameters": {
+          "functionCode": "const rows = [];\nfor (const item of items[0].json.data) {\n  const row = {\n    Name: item.name,\n    Email: item.email,\n    Branch: item.branch,\n    Section: item.section,\n    Year: item.year,\n    RollNo: item.rollNo,\n    College: item.college,\n    SelectedEvents: item.selectedEvents?.map(e => e.title).join(\", \") || \"\",\n    TotalAmount: item.totalAmount,\n    TransactionID: item.transactionId,\n    PaymentLink: item.paymentScreenshotLink,\n    RegistrationDate: item.registrationDate\n  };\n  rows.push({ json: row });\n}\nreturn rows;"
+        }
+      },
+      {
+        "id": "Spreadsheet",
+        "name": "Export to Excel",
+        "type": "n8n-nodes-base.spreadsheetFile",
+        "typeVersion": 1,
+        "position": [600, 200],
+        "parameters": {
+          "operation": "write",
+          "fileFormat": "xlsx",
+          "options": {},
+          "outputFileName": "registrations.xlsx"
+        }
+      }
+    ],
+    "connections": {
+      "Fetch Registration Data": {
+        "main": [[{ "node": "Format Data", "type": "main", "index": 0 }]]
+      },
+      "Format Data": {
+        "main": [[{ "node": "Export to Excel", "type": "main", "index": 0 }]]
+      }
+    }
+  }
+  
