@@ -1,6 +1,10 @@
 streamlit
+fastapi
+uvicorn
 langchain
 langchain-community
 langchain-groq
 groq
+requests
+python-dotenv
 pickle5; python_version < '3.8'
