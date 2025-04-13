@@ -69,7 +69,7 @@ prompt = PromptTemplate(
 )
 
 # --------------------- Langchain Init ---------------------
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = ""
 llm = ChatGroq(model_name="llama3-8b-8192", temperature=0.7)
 memory = load_memory()
 
